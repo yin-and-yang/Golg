@@ -30,3 +30,4 @@ E:\Program\GitHub\Golg\Sem\obj\Debug\Assembly-CSharp.csprojResolveAssemblyRefere
 E:\Program\GitHub\Golg\Sem\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
 E:\Program\GitHub\Golg\Sem\obj\Debug\Assembly-CSharp.dll
 E:\Program\GitHub\Golg\Sem\obj\Debug\Assembly-CSharp.pdb
+E:\Program\GitHub\Golg\Sem\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
