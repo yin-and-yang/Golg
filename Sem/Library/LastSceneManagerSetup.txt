@@ -1,8 +1,4 @@
 sceneSetups:
-<<<<<<< HEAD
 - path: Assets/Scenes/2d.unity
-=======
-- path: Assets/HomeStuff/Demo 1.unity
->>>>>>> c1654dc4e96a7e562c1e9efab8a7cf3dda66d804
   isLoaded: 1
   isActive: 1

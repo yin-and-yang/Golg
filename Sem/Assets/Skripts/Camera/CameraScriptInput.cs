@@ -15,9 +15,13 @@ public class CameraScriptInput : MonoBehaviour {
 	void Update () {
 
         if (CnInputManager.GetButtonUp("RButton"))
-        _object.MoweCam(false);
+            _object.MoweCam(false);
         else if (CnInputManager.GetButtonUp("LButton"))
-        _object.MoweCam(true);
+
+        {
+            Debug.Log("+");
+            _object.MoweCam(true);
+        }
 
     }
 }
