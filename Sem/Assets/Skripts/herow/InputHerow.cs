@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using CnControls;
+
 using System.Diagnostics;
 
 [RequireComponent(typeof(MoweHerow))]
@@ -10,6 +10,8 @@ public class InputHerow : Unit
 {
 
 
+    private RaycastHit hit;
+    public float speed = 1.3F;
 
     private MoweHerow c_movement = null;
 
@@ -68,11 +70,32 @@ public class InputHerow : Unit
 
                 if (!is_Move)
                 {
-                    is_Move = Input.touchCount > 0;
+                    is_Move = /*Input.touchCount > 0 ||*/ Input.GetMouseButtonDown(0);
 
+                 
                 }
-                if (Input.touchCount > 0)
+                if (/*Input.touchCount > 0 &&*/ is_Move)
                 {
+                   // foreach (Touch touch in Input.touches)
+                    {
+                        //if (touch.phase == TouchPhase.Began || Input.GetMouseButtonDown(0))
+                        {
+                            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+
+                            if (Physics.Raycast(ray, out hit))
+                            {
+
+
+                                if (hit.transform.gameObject.tag == "floor")
+                                {
+                                    is_Move = true;
+                                }
+
+                            }
+                        
+}
+                    }
                     touch = Input.touches;
                 }
 
@@ -128,7 +151,7 @@ public class InputHerow : Unit
             //float horizontal=0;// = CnInputManager.GetAxis("Horizontal");         
 
             //Call movement function in PlayerMovement
-            c_movement.Move(is_Move, isDoubleCR, isDoubleCL, isJumping, isRun, isUsed, touch);
+            c_movement.Move(ref is_Move, isDoubleCR, isDoubleCL, isJumping, isRun, isUsed, touch, hit);
             //Reset
             isJumping = false;
             isRun = false;

@@ -73,13 +73,13 @@ public class MoweHerow : Unit
             isGrounded = false;
 
          
-            CheckGrounded();
+          //  CheckGrounded();
          
 
-            g_Animator.SetBool("Ground", isGrounded);        
+            //g_Animator.SetBool("Ground", isGrounded);        
           
-            g_Animator.SetFloat("vSpeed", g_Rigidbody2D.velocity.y);
-            g_Animator.SetFloat("vSpeed", g_Rigidbody2D.velocity.y);
+         //   g_Animator.SetFloat("vSpeed", g_Rigidbody2D.velocity.y);
+          
 
             #region Audio
             if (move_x !=0)
@@ -134,7 +134,7 @@ public class MoweHerow : Unit
     }
     ////////////////////////////////////////////////////////////
 
-    public void Move(bool is_Move, bool isDoubleR, bool isDoubleL, bool isJumping, bool isRun, bool isUsed, Touch [] t)
+    public void Move( ref bool  is_Move, bool isDoubleR, bool isDoubleL, bool isJumping, bool isRun, bool isUsed, Touch [] t, RaycastHit hit)
     {
        
 
@@ -142,17 +142,31 @@ public class MoweHerow : Unit
         if (isDoubleR || isDoubleL)
             isRun = true;
 
-        if (is_Move)
+        if (transform.position != hit.point)
         {
+            
+                transform.position = Vector3.Lerp(transform.position, hit.point, Time.deltaTime * speed);
+                if (transform.position == hit.point)
+                    is_Move = false;
+
+            move_x = transform.position.x > hit.point.x ? -1 : 1;
+            move_y = transform.position.z > hit.point.z ? -1 : 1;
+
             //t[0].position;
+        }
+        else
+        {
+            is_Move = false;
+            move_x = 0;
+            move_y = 0;
         }
       
 
 
       
 
-        g_Animator.SetFloat("MoveX", move_x);
-        g_Animator.SetFloat("MoveX", move_y);
+        g_Animator.SetFloat("Direction", move_x);
+        g_Animator.SetFloat("Speed", move_y );
 
         //тут движение
 
@@ -234,7 +248,7 @@ public class MoweHerow : Unit
         if (horizontal < 0 || !RandL)
             sprite.flipX = !RandL;
         else
-            sprite.flipX = position.x < 0;
+            sprite.flipX = RandL;
     }
     ////////////////////////////////////////////////////////////
     private bool time = false;
@@ -255,6 +269,7 @@ public class MoweHerow : Unit
         return false;
     }
     ////////////////////////////////////////////////////////////
+    #region Audio
     void MoweAudio()
     {
 
@@ -289,5 +304,5 @@ public class MoweHerow : Unit
         StopStep = StartStopStep;
         IsStep = true;
     }
-   
+    #endregion Audio
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using CnControls;
+using UnityStandardAssets._2D;
 
 // Just in case so no "duplicate definition" stuff shows up
 namespace UnityStandardAssets.Copy._2D
@@ -28,7 +29,7 @@ namespace UnityStandardAssets.Copy._2D
         {
             float h = CnInputManager.GetAxis("Horizontal");
             // Pass all parameters to the character control script.
-            m_Character.Move(h, m_Jump);
+            m_Character.Move(h,true, m_Jump);
             m_Jump = false;
         }
     }
