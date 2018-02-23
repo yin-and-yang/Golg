@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
 using System.Diagnostics;
 
 [RequireComponent(typeof(MoweHerow))]
 public class InputHerow : Unit
 {
+   
 
+   
+    
 
     private RaycastHit hit;
     public float speed = 1.3F;
@@ -70,18 +71,20 @@ public class InputHerow : Unit
 
                 if (!is_Move)
                 {
-                    is_Move = /*Input.touchCount > 0 ||*/ Input.GetMouseButtonDown(0);
+                    is_Move = Input.touchCount > 0 /*|| Input.GetMouseButtonDown(0)*/;
 
                  
                 }
-                if (/*Input.touchCount > 0 &&*/ is_Move)
+                if (is_Move)
                 {
-                   // foreach (Touch touch in Input.touches)
+                    touch = Input.touches;
+                  //  foreach (Touch touch in Input.touches)
                     {
-                        //if (touch.phase == TouchPhase.Began || Input.GetMouseButtonDown(0))
+                        if (touch[0].phase == TouchPhase.Began /*|| Input.GetMouseButtonDown(0)*/)
                         {
-                            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                            //  Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+                            Ray ray = Camera.main.ScreenPointToRay(touch[0].position);
 
                             if (Physics.Raycast(ray, out hit))
                             {
@@ -90,20 +93,27 @@ public class InputHerow : Unit
                                 if (hit.transform.gameObject.tag == "floor")
                                 {
                                     is_Move = true;
+                                    UnityEngine.Debug.Log("true");
+                                    m.text = "true";
+                                }
+                                else
+                                {
+                                    UnityEngine.Debug.Log("false");
+                                    is_Move = false;
+                                    m.text = "false";
                                 }
 
                             }
                         
 }
                     }
-                    touch = Input.touches;
+                  
                 }
+                
 
-
-
+                #region
                 //if (!isDoubleCL)
                 //{
-
                 //    if (CnInputManager.GetButtonDown("LeftButton"))
                 //    {
                 //        isDoubleCR = false;
@@ -119,10 +129,8 @@ public class InputHerow : Unit
                 //{
                 //    isDoubleCL = false;
                 //}
-
                 //if (!isDoubleCR)
                 //{
-
                 //    if (CnInputManager.GetButtonDown("RightButton"))
                 //    {
                 //        isDoubleCL = false;
@@ -138,9 +146,10 @@ public class InputHerow : Unit
                 //{
                 //    isDoubleCR = false;
                 //}
-
+                #endregion
             }
     }
+   public TextMesh m;
 
     private void FixedUpdate()
     {
@@ -157,7 +166,7 @@ public class InputHerow : Unit
             isRun = false;
             isUsed = false;
 
-            is_Move = false;
+          //  is_Move = false;
            
 
         }

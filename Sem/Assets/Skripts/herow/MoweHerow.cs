@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class MoweHerow : Unit
 {
@@ -9,6 +10,9 @@ public class MoweHerow : Unit
     public AudioClip fallClip;
     public AudioSource audioSource;
     public AudioSource fallAudio;
+
+    [SerializeField]
+    NavMeshAgent agent;
 
     bool IsStep = false;
     float StopStep;
@@ -38,15 +42,14 @@ public class MoweHerow : Unit
     private Vector3 direction;
     GameObject[] g_Object;
 
-   
+    public GameObject my_sprite;
+
     float times = 0.2f;
     public float speedStopWall = 1f;
 
     private void Awake()
     {
-        
-
-
+       
         g_Rigidbody2D = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         g_Animator = GetComponent<Animator>();
@@ -82,20 +85,20 @@ public class MoweHerow : Unit
           
 
             #region Audio
-            if (move_x !=0)
-            {
-                if (isGrounded)
-                    MoweAudio();
-            }
-            else if (!IsStep)
-            {
-                StopAudio();
-            }
+            //if (move_x !=0)
+            //{
+            //    if (isGrounded)
+            //        MoweAudio();
+            //}
+            //else if (!IsStep)
+            //{
+            //    StopAudio();
+            //}
 
-            if (isGrounded && !isGroundedStart)
-            {
-                DownAudio();
-            }
+            //if (isGrounded && !isGroundedStart)
+            //{
+            //    DownAudio();
+            //}
             #endregion Audio
 
             isGroundedStart = isGrounded;
@@ -142,40 +145,37 @@ public class MoweHerow : Unit
         if (isDoubleR || isDoubleL)
             isRun = true;
 
-        if (transform.position != hit.point)
+        if (is_Move)
         {
-            
-                transform.position = Vector3.Lerp(transform.position, hit.point, Time.deltaTime * speed);
-                if (transform.position == hit.point)
-                    is_Move = false;
+            // transform.position = new Vector3(Mathf.Lerp(transform.position.x, hit.point.x, 5 * Time.deltaTime * speed), transform.position.y, Mathf.Lerp(transform.position.z, hit.point.z, 5 * Time.deltaTime * speed));
+            //  transform.position = Vector3.Lerp(transform.position, hit.point, Time.deltaTime * speed);  
+            agent.SetDestination(hit.point);
 
             move_x = transform.position.x > hit.point.x ? -1 : 1;
             move_y = transform.position.z > hit.point.z ? -1 : 1;
 
-            //t[0].position;
+           
+            if(transform.position.x == hit.point.x && transform.position.z == hit.point.z)
+            {
+                is_Move = false;
+            }
+           
+                 
         }
         else
         {
-            is_Move = false;
+           
             move_x = 0;
             move_y = 0;
         }
-      
 
 
-      
 
-        g_Animator.SetFloat("Direction", move_x);
-        g_Animator.SetFloat("Speed", move_y );
 
-        //тут движение
 
-        //
-
-        
-      
-
-        Corect_flipX(move_x);
+       // g_Animator.SetFloat("Direction", move_x);
+       //g_Animator.SetFloat("Speed", move_y);
+       // Corect_flipX(move_x);
       
 
         #region is Ground
@@ -231,16 +231,7 @@ public class MoweHerow : Unit
     //{
     //    gameObject.GetComponent<Animator>().SetTrigger("attack");
     //}
-    public override void ReciveDamage(float damag)
-    {
-
-        if (time)
-        {
-            HELS -= damag;
-            time = false;
-        }
-
-    }
+ 
     ////////////////////////////////////////////////////////////
   
     void Corect_flipX(float horizontal)
@@ -270,39 +261,39 @@ public class MoweHerow : Unit
     }
     ////////////////////////////////////////////////////////////
     #region Audio
-    void MoweAudio()
-    {
+    //void MoweAudio()
+    //{
 
 
-        if (IsStep)
-        {
+    //    if (IsStep)
+    //    {
 
-            audioSource.PlayOneShot(FootSteps[Random.Range(0, FootSteps.Length)]);
+    //        audioSource.PlayOneShot(FootSteps[Random.Range(0, FootSteps.Length)]);
 
-            IsStep = false;
-        }
-
-
-        if (StopStep < 0)
-        {
-            StopStep = StartStopStep;
-            IsStep = true;
-        }
-        if (StopStep > 0)
-            StopStep -= Time.deltaTime;
+    //        IsStep = false;
+    //    }
 
 
-    }
-    void DownAudio()
-    {        
-            fallAudio.PlayOneShot(fallClip); 
-    }
-    void StopAudio()
-    {
-        audioSource.Stop();
+    //    if (StopStep < 0)
+    //    {
+    //        StopStep = StartStopStep;
+    //        IsStep = true;
+    //    }
+    //    if (StopStep > 0)
+    //        StopStep -= Time.deltaTime;
 
-        StopStep = StartStopStep;
-        IsStep = true;
-    }
+
+    //}
+    //void DownAudio()
+    //{        
+    //        fallAudio.PlayOneShot(fallClip); 
+    //}
+    //void StopAudio()
+    //{
+    //    audioSource.Stop();
+
+    //    StopStep = StartStopStep;
+    //    IsStep = true;
+    //}
     #endregion Audio
 }
