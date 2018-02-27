@@ -32,16 +32,25 @@ public class MoweHerow : Unit
     private bool RandL = true;
     private bool isGrounded = false;
     private bool isGroundedStart = false;
+    private bool is_action=false;
 
     public int countFlay;
     public int maxCountFlay;
 
+    private Image Use_UI;
+    private Image Speek_UI;
+    private Image Look_UI;
+    public GameObject my_Actions;
+
+
+
+    private NavMeshAgent myAgent;
     private Animator g_Animator;
     private SpriteRenderer sprite;
     private Rigidbody2D g_Rigidbody2D;
     private Vector3 direction;
-    GameObject[] g_Object;
-
+ //   GameObject[] g_Object;
+    RaycastHit _hit;
     public GameObject my_sprite;
 
     float times = 0.2f;
@@ -49,8 +58,8 @@ public class MoweHerow : Unit
 
     private void Awake()
     {
-       
-        g_Rigidbody2D = GetComponent<Rigidbody2D>();
+        myAgent = GetComponent<NavMeshAgent>();
+         g_Rigidbody2D = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         g_Animator = GetComponent<Animator>();
 
@@ -61,13 +70,13 @@ public class MoweHerow : Unit
         direction = transform.right;
 
       
-        g_Object = GameObject.FindGameObjectsWithTag("Player2");
+    //    g_Object = GameObject.FindGameObjectsWithTag("Player2");
 
-        if (g_Object.Length != 0)
-        {
-            Transform player = g_Object[0].transform;
-            Physics2D.IgnoreCollision(player.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-        }
+        //if (g_Object.Length != 0)
+        //{
+        //    Transform player = g_Object[0].transform;
+        //    Physics2D.IgnoreCollision(player.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+        //}
     }
     void FixedUpdate()
     {
@@ -106,6 +115,8 @@ public class MoweHerow : Unit
     }
     private void Update()
     {
+
+        Context_Menu();
         if (Times())
             time = true;
     }
@@ -137,7 +148,7 @@ public class MoweHerow : Unit
     }
     ////////////////////////////////////////////////////////////
 
-    public void Move( ref bool  is_Move, bool isDoubleR, bool isDoubleL, bool isJumping, bool isRun, bool isUsed, Touch [] t, RaycastHit hit)
+    public void Move( bool  is_Move, bool is_actions, bool isDoubleR, bool isDoubleL, bool isJumping, bool isRun, bool isUsed, Touch [] t, RaycastHit hit)
     {
        
 
@@ -147,20 +158,22 @@ public class MoweHerow : Unit
 
         if (is_Move)
         {
+            _hit = hit;
+
+
             // transform.position = new Vector3(Mathf.Lerp(transform.position.x, hit.point.x, 5 * Time.deltaTime * speed), transform.position.y, Mathf.Lerp(transform.position.z, hit.point.z, 5 * Time.deltaTime * speed));
             //  transform.position = Vector3.Lerp(transform.position, hit.point, Time.deltaTime * speed);  
+
             agent.SetDestination(hit.point);
 
-            move_x = transform.position.x > hit.point.x ? -1 : 1;
-            move_y = transform.position.z > hit.point.z ? -1 : 1;
+            //  move_x = transform.position.x > hit.point.x ? -1 : 1;
+            // move_y = transform.position.z > hit.point.z ? -1 : 1;
 
-           
-            if(transform.position.x == hit.point.x && transform.position.z == hit.point.z)
-            {
-                is_Move = false;
-            }
-           
-                 
+
+            move_x = myAgent.velocity.x >= 0 ? (myAgent.velocity.x == 0 ? 0 : 1) : (myAgent.velocity.x < 0 ? -1 : 0);
+            move_y = myAgent.velocity.z >= 0 ? (myAgent.velocity.z == 0 ? 0 : 1) : (myAgent.velocity.z < 0 ? -1 : 0);
+
+            is_action = is_actions;
         }
         else
         {
@@ -169,15 +182,8 @@ public class MoweHerow : Unit
             move_y = 0;
         }
 
-
-
-
-
-       // g_Animator.SetFloat("Direction", move_x);
-       //g_Animator.SetFloat("Speed", move_y);
-       // Corect_flipX(move_x);
+       
       
-
         #region is Ground
         //if (isGrounded && isJumping)
         //{
@@ -202,26 +208,28 @@ public class MoweHerow : Unit
         #endregion is Ground
     }
 
-    ////////////////////////////////////////////////////////////
-    void CheckPleyar()
+
+    #region ContextMenu
+
+    public void Context_Menu()
     {
-        if (g_Object.Length != 0)
+        if (is_action)
         {
-            Transform player = g_Object[0].transform;
-            if (player.position.x < transform.position.x)
+           
+            if (Mathf.Abs( transform.position.x )>= Mathf.Abs(_hit.point.x)-1 && Mathf.Abs(transform.position.x )<= Mathf.Abs(_hit.point.x) + 1 &&
+                Mathf.Abs(transform.position.z) >= Mathf.Abs(_hit.point.z) - 1 && Mathf.Abs(transform.position.z) <= Mathf.Abs(_hit.point.z) + 1)
             {
-                direction.x = -1f;
-                RandL = false;
-               
-            }
-            else if (player.position.x > transform.position.x)
-            {
-                direction.x = 1f;
-                RandL = true;
-               
+                my_Actions.transform.position = new Vector3(transform.position.x, my_Actions.transform.position.y, transform.position.z);
+                my_Actions.active = true;
+
             }
         }
+        else
+        {
+            my_Actions.active = false;
+        }
     }
+    #region actions
     void Used()
     {
 
@@ -231,17 +239,38 @@ public class MoweHerow : Unit
     //{
     //    gameObject.GetComponent<Animator>().SetTrigger("attack");
     //}
- 
+
     ////////////////////////////////////////////////////////////
+    #endregion actions
+    #endregion
+
+
+
+    #region CheckPleyar
+    //void CheckPleyar()
+    //{
+    //    if (g_Object.Length != 0)
+    //    {
+    //        Transform player = g_Object[0].transform;
+    //        if (player.position.x < transform.position.x)
+    //        {
+    //            direction.x = -1f;
+    //            RandL = false;
+
+    //        }
+    //        else if (player.position.x > transform.position.x)
+    //        {
+    //            direction.x = 1f;
+    //            RandL = true;
+
+    //        }
+    //    }
+    //}
+    #endregion CheckPleyar
+
   
-    void Corect_flipX(float horizontal)
-    {
-        if (horizontal < 0 || !RandL)
-            sprite.flipX = !RandL;
-        else
-            sprite.flipX = RandL;
-    }
     ////////////////////////////////////////////////////////////
+    #region Timer
     private bool time = false;
     public float timer = 2f;
     public float stay_timer = 2f;
@@ -259,6 +288,7 @@ public class MoweHerow : Unit
         }
         return false;
     }
+    #endregion Timer
     ////////////////////////////////////////////////////////////
     #region Audio
     //void MoweAudio()

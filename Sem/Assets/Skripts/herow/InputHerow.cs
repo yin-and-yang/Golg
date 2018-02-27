@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(MoweHerow))]
 public class InputHerow : Unit
 {
    
-
-   
-    
-
     private RaycastHit hit;
+
+    private RaycastHit2D _hit_2D;
     public float speed = 1.3F;
 
     private MoweHerow c_movement = null;
@@ -21,6 +20,13 @@ public class InputHerow : Unit
     private bool isUsed = false;
 
     private bool isActive = false;
+
+  
+    private bool is_Look = false;
+    private bool is_Touching = false;
+    private bool is_Speek = false;
+
+    private bool is_actions = false;
 
     private bool is_Move = false;
   
@@ -34,7 +40,7 @@ public class InputHerow : Unit
     float currentTime = 0;
     float lastClickTime = 0;
     float clickTime = 0.2F;
-
+    public Text m;
     Touch[] touch;
     void Awake()
     {
@@ -71,44 +77,66 @@ public class InputHerow : Unit
 
                 if (!is_Move)
                 {
-                    is_Move = Input.touchCount > 0 /*|| Input.GetMouseButtonDown(0)*/;
-
-                 
-                }
-                if (is_Move)
-                {
-                    touch = Input.touches;
-                  //  foreach (Touch touch in Input.touches)
+                    is_Move = Input.touchCount > 0 || Input.GetMouseButtonDown(0);
+                    if (Input.touchCount > 0)
                     {
-                        if (touch[0].phase == TouchPhase.Began /*|| Input.GetMouseButtonDown(0)*/)
+                        touch = Input.touches;
+                        if (touch[0].phase == TouchPhase.Began)
                         {
-                            //  Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
                             Ray ray = Camera.main.ScreenPointToRay(touch[0].position);
-
                             if (Physics.Raycast(ray, out hit))
                             {
-
-
                                 if (hit.transform.gameObject.tag == "floor")
                                 {
                                     is_Move = true;
-                                    UnityEngine.Debug.Log("true");
-                                    m.text = "true";
+                                }
+                                else if (hit.transform.gameObject.tag == "fridge")
+                                {
+                                    is_Move = true;
+                                    is_actions = true;
                                 }
                                 else
                                 {
-                                    UnityEngine.Debug.Log("false");
+                                    
                                     is_Move = false;
-                                    m.text = "false";
+                                   
                                 }
-
                             }
-                        
-}
+                        }
                     }
-                  
+                    else if (Input.GetMouseButtonDown(0))
+                    {
+                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                        if (Physics.Raycast(ray, out hit))
+                        {
+                            m.text = hit.transform.gameObject.tag;
+                            if (hit.transform.gameObject.tag == "floor")
+                            {
+                                is_Move = true;
+                                is_actions = false;
+                               
+                            }
+                            else if (hit.transform.gameObject.tag == "fridge")
+                            {
+                                is_Move = true;
+                                is_actions = true;
+                               
+                            }
+                            else
+                            {
+                              
+                                is_Move = false;
+                                is_actions = false;
+                            }
+                        }
+                    }
                 }
+
+
+
+
+            }
+               
                 
 
                 #region
@@ -147,9 +175,9 @@ public class InputHerow : Unit
                 //    isDoubleCR = false;
                 //}
                 #endregion
-            }
     }
-   public TextMesh m;
+    
+   
 
     private void FixedUpdate()
     {
@@ -160,14 +188,13 @@ public class InputHerow : Unit
             //float horizontal=0;// = CnInputManager.GetAxis("Horizontal");         
 
             //Call movement function in PlayerMovement
-            c_movement.Move(ref is_Move, isDoubleCR, isDoubleCL, isJumping, isRun, isUsed, touch, hit);
+            c_movement.Move( is_Move,is_actions, isDoubleCR, isDoubleCL, isJumping, isRun, isUsed, touch, hit);
             //Reset
             isJumping = false;
             isRun = false;
             isUsed = false;
-
-          //  is_Move = false;
-           
+            is_Move = false;
+            is_actions = false;
 
         }
         else
