@@ -41,7 +41,7 @@ public class MoweHerow : Unit
     private Image Speek_UI;
     private Image Look_UI;
     public GameObject my_Actions;
-
+    public float offSetZ;
 
 
     private NavMeshAgent myAgent;
@@ -219,7 +219,7 @@ public class MoweHerow : Unit
             if (Mathf.Abs( transform.position.x )>= Mathf.Abs(_hit.point.x)-1 && Mathf.Abs(transform.position.x )<= Mathf.Abs(_hit.point.x) + 1 &&
                 Mathf.Abs(transform.position.z) >= Mathf.Abs(_hit.point.z) - 1 && Mathf.Abs(transform.position.z) <= Mathf.Abs(_hit.point.z) + 1)
             {
-                my_Actions.transform.position = new Vector3(transform.position.x, my_Actions.transform.position.y, transform.position.z);
+                my_Actions.transform.position = new Vector3(transform.position.x, my_Actions.transform.position.y, transform.position.z + offSetZ);
                 my_Actions.active = true;
 
             }

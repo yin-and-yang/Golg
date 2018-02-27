@@ -10,7 +10,8 @@ public class InputHerow : Unit
    
     private RaycastHit hit;
 
-    private RaycastHit2D _hit_2D;
+    //private RaycastHit2D _hit_2D;
+
     public float speed = 1.3F;
 
     private MoweHerow c_movement = null;
@@ -46,6 +47,7 @@ public class InputHerow : Unit
     {
         //References
         c_movement = GetComponent<MoweHerow>();
+       // _hit_2D = new RaycastHit2D();
     }
 
     public void IsStop()
@@ -77,13 +79,23 @@ public class InputHerow : Unit
 
                 if (!is_Move)
                 {
-                    is_Move = Input.touchCount > 0 || Input.GetMouseButtonDown(0);
+                    is_Move = Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began || Input.GetMouseButtonDown(0);
+
                     if (Input.touchCount > 0)
                     {
                         touch = Input.touches;
                         if (touch[0].phase == TouchPhase.Began)
                         {
+
                             Ray ray = Camera.main.ScreenPointToRay(touch[0].position);
+
+                            //RaycastHit2D _hit_2D = Physics2D.Raycast(Camera.main.ScreenToViewportPoint(touch[0].position),Vector2.zero);
+
+                            //if (_hit_2D!=null)
+                            //{
+                            //    m.text = _hit_2D.transform.gameObject.tag;
+                            //}
+
                             if (Physics.Raycast(ray, out hit))
                             {
                                 if (hit.transform.gameObject.tag == "floor")
@@ -106,10 +118,22 @@ public class InputHerow : Unit
                     }
                     else if (Input.GetMouseButtonDown(0))
                     {
+
+                        
+                        //RaycastHit2D _hit_2D = Physics2D.Raycast(Camera.main.ScreenToViewportPoint(Input.mousePosition), Vector2.zero);
+
+                        //if (_hit_2D != null)
+                        //{
+                        //    UnityEngine.Debug.Log(_hit_2D.collider.GetComponentInParent<RectTransform>().sizeDelta);
+                          
+                        //   // if (_hit_2D.transform.gameObject.tag=="Speek")
+                           
+                        //}
+
                         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                         if (Physics.Raycast(ray, out hit))
                         {
-                            m.text = hit.transform.gameObject.tag;
+                           // m.text = hit.transform.gameObject.tag;
                             if (hit.transform.gameObject.tag == "floor")
                             {
                                 is_Move = true;
