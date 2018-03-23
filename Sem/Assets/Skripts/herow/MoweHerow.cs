@@ -32,7 +32,7 @@ public class MoweHerow : Unit
     private bool RandL = true;
     private bool isGrounded = false;
     private bool isGroundedStart = false;
-    private bool is_action=false;
+    public bool is_action=false;
 
     public int countFlay;
     public int maxCountFlay;
@@ -213,20 +213,26 @@ public class MoweHerow : Unit
 
     public void Context_Menu()
     {
+      
         if (is_action)
         {
            
             if (Mathf.Abs( transform.position.x )>= Mathf.Abs(_hit.point.x)-1 && Mathf.Abs(transform.position.x )<= Mathf.Abs(_hit.point.x) + 1 &&
-                Mathf.Abs(transform.position.z) >= Mathf.Abs(_hit.point.z) - 1 && Mathf.Abs(transform.position.z) <= Mathf.Abs(_hit.point.z) + 1)
+                Mathf.Abs(transform.position.z) >= Mathf.Abs(_hit.point.z) - 1 && Mathf.Abs(transform.position.z) <= Mathf.Abs(_hit.point.z) + 1&&
+                myAgent.velocity.x==0 && myAgent.velocity.y == 0)
             {
                 my_Actions.transform.position = new Vector3(transform.position.x, my_Actions.transform.position.y, transform.position.z + offSetZ);
-                my_Actions.active = true;
+                my_Actions.SetActive(true);
 
+            }
+            else
+            {
+                my_Actions.SetActive(false);
             }
         }
         else
         {
-            my_Actions.active = false;
+            my_Actions.SetActive(false);
         }
     }
     #region actions

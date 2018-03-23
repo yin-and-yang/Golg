@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
 using UnityEngine.UI;
+using CnControls;
 
 [RequireComponent(typeof(MoweHerow))]
 public class InputHerow : Unit
@@ -22,9 +23,10 @@ public class InputHerow : Unit
 
     private bool isActive = false;
 
-  
+   
+
     private bool is_Look = false;
-    private bool is_Touching = false;
+    private bool is_Use = false;
     private bool is_Speek = false;
 
     private bool is_actions = false;
@@ -57,11 +59,30 @@ public class InputHerow : Unit
 
     void Update()
     {
-        if (stop)
-            if (Activ)
-            {
+        touch = Input.touches;
 
-             
+
+                if (!is_Look)
+                {
+                    is_Look = CnInputManager.GetButtonDown("Look");
+                    UnityEngine.Debug.Log("L -" + is_Look);
+                   
+                }
+                if (!is_Use)
+                {
+                    is_Use = CnInputManager.GetButtonDown("Use");
+
+                    UnityEngine.Debug.Log("U -" + is_Use);
+
+                }
+                if (!is_Speek)
+                {
+                    is_Speek = CnInputManager.GetButtonDown("Speek");
+
+                    UnityEngine.Debug.Log("S -" + is_Speek);
+
+                }
+
                 if (!isJumping)
                 {
                   
@@ -77,24 +98,19 @@ public class InputHerow : Unit
                  //   isUsed = CnInputManager.GetButton("Used");
                 }
 
-                if (!is_Move)
+                if (!is_Move && !is_Speek && !is_Use&& !is_Look)
                 {
-                    is_Move = Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began || Input.GetMouseButtonDown(0);
+                    is_Move = touch.Length > 0 && touch[0].phase == TouchPhase.Began || Input.GetMouseButtonDown(0);
 
-                    if (Input.touchCount > 0)
+                    if (touch.Length  > 0)
                     {
-                        touch = Input.touches;
+                        
                         if (touch[0].phase == TouchPhase.Began)
                         {
 
                             Ray ray = Camera.main.ScreenPointToRay(touch[0].position);
 
-                            //RaycastHit2D _hit_2D = Physics2D.Raycast(Camera.main.ScreenToViewportPoint(touch[0].position),Vector2.zero);
-
-                            //if (_hit_2D!=null)
-                            //{
-                            //    m.text = _hit_2D.transform.gameObject.tag;
-                            //}
+                          
 
                             if (Physics.Raycast(ray, out hit))
                             {
@@ -109,9 +125,9 @@ public class InputHerow : Unit
                                 }
                                 else
                                 {
-                                    
+
                                     is_Move = false;
-                                   
+                                     is_actions = false;
                                 }
                             }
                         }
@@ -119,47 +135,55 @@ public class InputHerow : Unit
                     else if (Input.GetMouseButtonDown(0))
                     {
 
-                        
-                        //RaycastHit2D _hit_2D = Physics2D.Raycast(Camera.main.ScreenToViewportPoint(Input.mousePosition), Vector2.zero);
 
-                        //if (_hit_2D != null)
-                        //{
-                        //    UnityEngine.Debug.Log(_hit_2D.collider.GetComponentInParent<RectTransform>().sizeDelta);
-                          
-                        //   // if (_hit_2D.transform.gameObject.tag=="Speek")
-                           
-                        //}
+
 
                         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                        if (Physics.Raycast(ray, out hit))
+
+                        //UnityEngine.Debug.Log(Input.mousePosition);
+
+                        bool isHit = Physics.Raycast(ray, out hit);
+                        if (isHit)
                         {
-                           // m.text = hit.transform.gameObject.tag;
+
+                            // m.text = hit.transform.gameObject.tag;
                             if (hit.transform.gameObject.tag == "floor")
                             {
                                 is_Move = true;
                                 is_actions = false;
-                               
+
                             }
                             else if (hit.transform.gameObject.tag == "fridge")
                             {
                                 is_Move = true;
                                 is_actions = true;
-                               
+
                             }
                             else
                             {
-                              
                                 is_Move = false;
-                                is_actions = false;
+                                 is_actions = false;
                             }
                         }
+
+                        //GameObject _lineObject = new GameObject();
+                        //LineRenderer _line = _lineObject.AddComponent<LineRenderer>();
+                        //_line.SetPosition(0, ray.origin);
+                        //if (isHit)
+                        //    _line.SetPosition(1, hit.point);
+                        //else
+                        //    _line.SetPosition(1, ray.direction);
+                        //_line.SetWidth(0.05f, 0.05f);
+                        //Destroy(_lineObject, 0.5f);
                     }
                 }
+             else
+        {
+            c_movement.is_action=false;
+        }
+               
 
-
-
-
-            }
+            
                
                 
 
@@ -220,6 +244,11 @@ public class InputHerow : Unit
             is_Move = false;
             is_actions = false;
 
+
+             is_Look = false;
+            is_Speek = false;
+            is_Use = false;
+          
         }
         else
         {
