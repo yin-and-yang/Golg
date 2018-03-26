@@ -65,21 +65,20 @@ public class InputHerow : Unit
                 if (!is_Look)
                 {
                     is_Look = CnInputManager.GetButtonDown("Look");
-                    UnityEngine.Debug.Log("L -" + is_Look);
+             
                    
                 }
                 if (!is_Use)
                 {
                     is_Use = CnInputManager.GetButtonDown("Use");
 
-                    UnityEngine.Debug.Log("U -" + is_Use);
+                   
 
                 }
                 if (!is_Speek)
                 {
                     is_Speek = CnInputManager.GetButtonDown("Speek");
-
-                    UnityEngine.Debug.Log("S -" + is_Speek);
+            
 
                 }
 
@@ -100,6 +99,9 @@ public class InputHerow : Unit
 
                 if (!is_Move && !is_Speek && !is_Use&& !is_Look)
                 {
+
+                    UnityEngine.Debug.Log("MOWE -" + is_Move);
+
                     is_Move = touch.Length > 0 && touch[0].phase == TouchPhase.Began || Input.GetMouseButtonDown(0);
 
                     if (touch.Length  > 0)
@@ -178,9 +180,9 @@ public class InputHerow : Unit
                     }
                 }
              else
-        {
-            c_movement.is_action=false;
-        }
+             {
+                c_movement.is_action=false;
+             }
                
 
             
