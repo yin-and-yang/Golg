@@ -100,7 +100,8 @@ public class InputHerow : Unit
                 if (!is_Move && !is_Speek && !is_Use&& !is_Look)
                 {
 
-                    UnityEngine.Debug.Log("MOWE -" + is_Move);
+
+
 
                     is_Move = touch.Length > 0 && touch[0].phase == TouchPhase.Began || Input.GetMouseButtonDown(0);
 
