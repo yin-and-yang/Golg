@@ -122,8 +122,8 @@ public class MoweHerow : Unit
                 my_sprite.transform.localScale = new Vector3((my_sprite.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f
                      , (my_sprite.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f,
                      .1f);
-                transform.localScale = new Vector3((transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f
-                      , (transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f,
+                transform.localScale = new Vector3((transform.position.z * 100 / now_unit_herow.z) / 100.0f 
+                      , (transform.position.z * 100 / now_unit_herow.z) / 100.0f ,
                       .1f);
             }
         }

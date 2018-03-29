@@ -123,8 +123,9 @@ public class InputHerow : Unit
                                 {
                                     is_Move = true;
                                 }
-                                else if (hit.transform.gameObject.tag == "fridge")
+                                else if (hit.transform.gameObject.tag == "fridge"|| hit.transform.gameObject.tag == "curbstone")
                                 {
+
                                     is_Move = true;
                                     is_actions = true;
                                 }
@@ -145,8 +146,8 @@ public class InputHerow : Unit
 
                         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                        UnityEngine.Debug.Log(Input.mousePosition);
-
+                       UnityEngine.Debug.Log(Input.mousePosition);
+ 
                         bool isHit = Physics.Raycast(ray, out hit);
                         if (isHit)
                         {
@@ -158,7 +159,7 @@ public class InputHerow : Unit
                                 is_actions = false;
 
                             }
-                            else if (hit.transform.gameObject.tag == "fridge")
+                            else if (hit.transform.gameObject.tag == "fridge" || hit.transform.gameObject.tag == "curbstone")
                             {
                                 is_Move = true;
                                 is_actions = true;
