@@ -22,15 +22,16 @@ public class My_sprite : MonoBehaviour {
 
         sprite = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+      
 
     }
 
-    // Update is called once per frame
-    void Update () {
-        if(myAgent.velocity.x < 0&& myAgent.velocity.z > 0)
+    void Mowe()
+    {
+        if (myAgent.velocity.x < 0 && myAgent.velocity.z > 0)
         {
             animator.SetFloat("Direction", -1);//x
-            animator.SetFloat("Speed",1);//z
+            animator.SetFloat("Speed", 1);//z
         }
         else if (myAgent.velocity.x == 0 && myAgent.velocity.z > 0)
         {
@@ -73,8 +74,16 @@ public class My_sprite : MonoBehaviour {
             animator.SetFloat("Speed", 0);
         }
 
-        transform.localPosition = new Vector3(target.localPosition.x, transform.localPosition.y+yOffset, target.localPosition.z);
+        transform.localPosition = new Vector3(target.localPosition.x, transform.localPosition.y + yOffset, target.localPosition.z);
 
+    }
+
+
+    // Update is called once per frame
+    void Update () {
+
+        
+        Mowe();
         transform.rotation = Camera.rotation;
 
         Corect_flipX(myAgent.velocity.x);

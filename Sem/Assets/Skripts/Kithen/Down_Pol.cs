@@ -8,7 +8,7 @@ public class Down_Pol : MonoBehaviour {
     Vector3 now_unit_herow;
   
 
-    public GameObject start_unit;
+    public List<GameObject> start_unit;
     public float point;
 
     void Awake()
@@ -23,6 +23,8 @@ public class Down_Pol : MonoBehaviour {
 	void Update () {
       
         //mast
+
+        
             unit.transform.localScale = new Vector3((unit.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f
                 , (unit.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f, 
                 .1f);
@@ -30,4 +32,6 @@ public class Down_Pol : MonoBehaviour {
         //
          
     }
+
+   
 }

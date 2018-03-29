@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
 using UnityEngine.UI;
 using CnControls;
+
 
 [RequireComponent(typeof(MoweHerow))]
 public class InputHerow : Unit
@@ -117,7 +119,7 @@ public class InputHerow : Unit
 
                             if (Physics.Raycast(ray, out hit))
                             {
-                                if (hit.transform.gameObject.tag == "floor")
+                                if (hit.transform.gameObject.tag == "floor" || hit.transform.gameObject.tag == "Ground_kithen")
                                 {
                                     is_Move = true;
                                 }
@@ -143,14 +145,14 @@ public class InputHerow : Unit
 
                         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                        //UnityEngine.Debug.Log(Input.mousePosition);
+                        UnityEngine.Debug.Log(Input.mousePosition);
 
                         bool isHit = Physics.Raycast(ray, out hit);
                         if (isHit)
                         {
 
                             // m.text = hit.transform.gameObject.tag;
-                            if (hit.transform.gameObject.tag == "floor")
+                            if (hit.transform.gameObject.tag == "floor"|| hit.transform.gameObject.tag == "Ground_kithen")
                             {
                                 is_Move = true;
                                 is_actions = false;

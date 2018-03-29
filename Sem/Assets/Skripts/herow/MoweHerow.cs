@@ -18,7 +18,7 @@ public class MoweHerow : Unit
     float StopStep;
     public float StartStopStep;
 
-   
+    Vector3 now_unit_herow;
 
     Vector3 position;
 
@@ -62,21 +62,15 @@ public class MoweHerow : Unit
          g_Rigidbody2D = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         g_Animator = GetComponent<Animator>();
-
+        now_unit_herow = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
+
     void Start()
     {
         memor_speed = speed;
         direction = transform.right;
 
-      
-    //    g_Object = GameObject.FindGameObjectsWithTag("Player2");
 
-        //if (g_Object.Length != 0)
-        //{
-        //    Transform player = g_Object[0].transform;
-        //    Physics2D.IgnoreCollision(player.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-        //}
     }
     void FixedUpdate()
     {
@@ -85,12 +79,7 @@ public class MoweHerow : Unit
             isGrounded = false;
 
          
-          //  CheckGrounded();
-         
-
-            //g_Animator.SetBool("Ground", isGrounded);        
-          
-         //   g_Animator.SetFloat("vSpeed", g_Rigidbody2D.velocity.y);
+      
           
 
             #region Audio
@@ -121,6 +110,25 @@ public class MoweHerow : Unit
             time = true;
     }
     ////////////////////////////////////////////////////////////
+
+    void Size_picture()
+    {
+        Collider[] colliders = Physics.OverlapSphere(new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), 1f);
+        foreach (Collider c in colliders)
+        {
+           
+            if (c.tag == "Ground_kithen")
+            {
+                my_sprite.transform.localScale = new Vector3((my_sprite.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f
+                     , (my_sprite.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f,
+                     .1f);
+                transform.localScale = new Vector3((transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f
+                      , (transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f,
+                      .1f);
+            }
+        }
+    }
+
     void CheckGrounded()
     {
 
@@ -161,13 +169,10 @@ public class MoweHerow : Unit
             _hit = hit;
 
 
-            // transform.position = new Vector3(Mathf.Lerp(transform.position.x, hit.point.x, 5 * Time.deltaTime * speed), transform.position.y, Mathf.Lerp(transform.position.z, hit.point.z, 5 * Time.deltaTime * speed));
-            //  transform.position = Vector3.Lerp(transform.position, hit.point, Time.deltaTime * speed);  
+          
 
             agent.SetDestination(hit.point);
 
-            //  move_x = transform.position.x > hit.point.x ? -1 : 1;
-            // move_y = transform.position.z > hit.point.z ? -1 : 1;
 
 
             move_x = myAgent.velocity.x >= 0 ? (myAgent.velocity.x == 0 ? 0 : 1) : (myAgent.velocity.x < 0 ? -1 : 0);
@@ -181,9 +186,9 @@ public class MoweHerow : Unit
             move_x = 0;
             move_y = 0;
         }
+        Size_picture();
 
-       
-      
+
         #region is Ground
         //if (isGrounded && isJumping)
         //{
@@ -198,7 +203,7 @@ public class MoweHerow : Unit
         //    g_Animator.SetBool("Ground", false);
         //    g_Rigidbody2D.AddForce(new Vector2(0f, jump/2), ForceMode2D.Impulse);
         //}
-        
+
         //if (isGrounded && isUsed && g_Animator.GetBool("Ground"))
         //{
         //    isUsed = false;
