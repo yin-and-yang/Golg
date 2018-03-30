@@ -40,8 +40,8 @@ public class CameraScript : MonoBehaviour {
        
     }
     void Start () {
-        camera_child = transform.FindChild("camera_child");
-        camera_transform = camera_child.FindChild("Main Camera");
+        camera_child = transform.Find("camera_child");
+        camera_transform = camera_child.Find("Main Camera");
 
         isKey = false;
         isMowe = true;
