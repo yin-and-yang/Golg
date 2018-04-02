@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Diagnostics;
 using UnityEngine.UI;
 using CnControls;
-using UnityEditor;
+//using UnityEditor;
 
 public class Starn_menu : MonoBehaviour {
 
@@ -32,14 +32,14 @@ public class Starn_menu : MonoBehaviour {
         }
         else if (CnInputManager.GetButtonDown("Exit"))
         {
-            if (EditorUtility.DisplayDialog("title", "message", "Yes", "No"))
-            {
+           // if ()
+          //  {
+          
+          //  }
+         //   else
+         //   {
 
-            }
-            else
-            {
-
-            }
+          //  }
         }
         
 
