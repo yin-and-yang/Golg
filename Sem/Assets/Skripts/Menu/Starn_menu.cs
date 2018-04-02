@@ -4,10 +4,11 @@ using UnityEngine;
 using System.Diagnostics;
 using UnityEngine.UI;
 using CnControls;
+using UnityEditor;
 
 public class Starn_menu : MonoBehaviour {
 
-    public string NextScen;
+    public List<string> NextScen;
 
     public GameObject messege_box;
     bool is_true;
@@ -23,7 +24,7 @@ public class Starn_menu : MonoBehaviour {
 
         if (CnInputManager.GetButtonDown("Game"))
         {
-            Application.LoadLevel(NextScen);
+            Application.LoadLevel(NextScen[0]);
         }
         else if (CnInputManager.GetButtonDown("Ophens"))
         {
@@ -31,7 +32,7 @@ public class Starn_menu : MonoBehaviour {
         }
         else if (CnInputManager.GetButtonDown("Exit"))
         {
-            if (EditorUtility.DisplayDialog(title, message, "Yes", "No"))
+            if (EditorUtility.DisplayDialog("title", "message", "Yes", "No"))
             {
 
             }
