@@ -19,6 +19,7 @@ public class MoweHerow : Unit
     bool IsStep = false;
     float StopStep;
     public float StartStopStep;
+    public float speed_my = 1.3f;
 
     Vector3 now_unit_herow;
    public Transform X_cord_perspective;
@@ -68,7 +69,7 @@ public class MoweHerow : Unit
 
     void Start()
     {
-        memor_speed = speed;
+        memor_speed = speed_my;
         direction = transform.right;
 
 
