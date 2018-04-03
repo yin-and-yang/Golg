@@ -6,11 +6,13 @@ using UnityEngine.AI;
 
 public class MoweHerow : Unit
 {
+    #region Pole 
+    #region Audio
     public AudioClip[] FootSteps;
     public AudioClip fallClip;
     public AudioSource audioSource;
     public AudioSource fallAudio;
-
+    #endregion Audio
     [SerializeField]
     NavMeshAgent agent;
 
@@ -19,8 +21,8 @@ public class MoweHerow : Unit
     public float StartStopStep;
 
     Vector3 now_unit_herow;
-
-    Vector3 position;
+   public Transform X_cord_perspective;
+    float result_perspective_x;
 
     private float memor_speed;
     public float run;
@@ -34,33 +36,32 @@ public class MoweHerow : Unit
     private bool isGroundedStart = false;
     public bool is_action=false;
 
-    public int countFlay;
-    public int maxCountFlay;
+   
 
+    #region GUI
     private Image Use_UI;
     private Image Speek_UI;
     private Image Look_UI;
     public GameObject my_Actions;
     public float offSetZ;
-
+    #endregion GUI
 
     private NavMeshAgent myAgent;
     private Animator g_Animator;
-    private SpriteRenderer sprite;
-    private Rigidbody2D g_Rigidbody2D;
+  
     private Vector3 direction;
- //   GameObject[] g_Object;
+
     RaycastHit _hit;
     public GameObject my_sprite;
 
     float times = 0.2f;
     public float speedStopWall = 1f;
 
+    #endregion Pole
     private void Awake()
     {
         myAgent = GetComponent<NavMeshAgent>();
-         g_Rigidbody2D = GetComponent<Rigidbody2D>();
-        sprite = GetComponent<SpriteRenderer>();
+        
         g_Animator = GetComponent<Animator>();
         now_unit_herow = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
@@ -119,12 +120,43 @@ public class MoweHerow : Unit
            
             if (c.tag == "Ground_kithen")
             {
+                result_perspective_x = -
+                      (transform.position.x <= X_cord_perspective.position.x ?  X_cord_perspective.position.x - transform.position.x :  transform.position.x- X_cord_perspective.position.x );
+
+                my_sprite.transform.localScale = new Vector3((my_sprite.transform.position.z * 100 / now_unit_herow.z ) / 100.0f + .1f - result_perspective_x
+                    , (my_sprite.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f - result_perspective_x,
+                   .1f );
+                transform.localScale = new Vector3((transform.position.z * 100 / now_unit_herow.z) / 100.0f
+                    , (transform.position.z * 100 / now_unit_herow.z) / 100.0f,
+                  (transform.position.z * 100 / now_unit_herow.z) / 100.0f);
+
+
+
+
+                //Интересно 
+                /*
+               result_perspective_x = -
+                      (transform.position.x <= X_cord_perspective.position.x ? transform.position.x - X_cord_perspective.position.x : X_cord_perspective.position.x - transform.position.x);
+
+                    my_sprite.transform.localScale = new Vector3((my_sprite.transform.position.z * 100 / now_unit_herow.z ) / 100.0f + .1f - result_perspective_x
+                    , (my_sprite.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f - result_perspective_x,
+                   .1f );
+                transform.localScale = new Vector3((transform.position.z * 100 / now_unit_herow.z) / 100.0f
+                    , (transform.position.z * 100 / now_unit_herow.z) / 100.0f,
+                  (transform.position.z * 100 / now_unit_herow.z) / 100.0f);
+                  */
+
+
+                /*
+
                 my_sprite.transform.localScale = new Vector3((my_sprite.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f
                      , (my_sprite.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f,
-                     .1f);
+                     (my_sprite.transform.position.z * 100 / now_unit_herow.z) / 100.0f + .1f);
                 transform.localScale = new Vector3((transform.position.z * 100 / now_unit_herow.z) / 100.0f 
                       , (transform.position.z * 100 / now_unit_herow.z) / 100.0f ,
-                      .1f);
+                    (transform.position.z * 100 / now_unit_herow.z) / 100.0f);
+                    */
+
             }
         }
     }
@@ -141,7 +173,7 @@ public class MoweHerow : Unit
                 isGrounded = true;
                 g_Animator.SetBool("Ground", true);
 
-                countFlay = 0;
+               
 
                 return;
             }
