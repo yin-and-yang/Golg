@@ -21,6 +21,12 @@ public class Starn_menu : MonoBehaviour {
     public GameObject messege_box;
     Status position_map;
     bool is_true;
+
+    #region Audio
+    public AudioClip[] FootSteps;   
+    public AudioSource audioSource;  
+    #endregion Audio
+
     #endregion Pole
     // Use this for initialization
     void Start () {
