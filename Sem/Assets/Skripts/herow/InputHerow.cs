@@ -146,14 +146,16 @@ public class InputHerow : Unit
 
                         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                       UnityEngine.Debug.Log(Input.mousePosition);
+                     //  UnityEngine.Debug.Log(Input.mousePosition);
  
                         bool isHit = Physics.Raycast(ray, out hit);
                         if (isHit)
                         {
 
                             // m.text = hit.transform.gameObject.tag;
-                            if (hit.transform.gameObject.tag == "floor"|| hit.transform.gameObject.tag == "Ground_kithen")
+                            if (hit.transform.gameObject.tag == "floor"||
+                                hit.transform.gameObject.tag == "Ground_kithen"||
+                                hit.transform.gameObject.tag == "Left_map")
                             {
                                 is_Move = true;
                                 is_actions = false;

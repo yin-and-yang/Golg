@@ -9,9 +9,8 @@ public class MoweHerow : Unit
     #region Pole 
     #region Audio
     public AudioClip[] FootSteps;
-    public AudioClip fallClip;
     public AudioSource audioSource;
-    public AudioSource fallAudio;
+
     #endregion Audio
     [SerializeField]
     NavMeshAgent agent;
@@ -32,13 +31,14 @@ public class MoweHerow : Unit
     private float move_x = 0;
     private float move_y = 0;
 
+    private float move_x_now = 0;
+    private float move_y_now = 0;
+
     private bool RandL = true;
     private bool isGrounded = false;
     private bool isGroundedStart = false;
     public bool is_action=false;
-
    
-
     #region GUI
     private Image Use_UI;
     private Image Speek_UI;
@@ -61,8 +61,7 @@ public class MoweHerow : Unit
     #endregion Pole
     private void Awake()
     {
-        myAgent = GetComponent<NavMeshAgent>();
-        
+        myAgent = GetComponent<NavMeshAgent>();      
         g_Animator = GetComponent<Animator>();
         now_unit_herow = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
@@ -71,35 +70,42 @@ public class MoweHerow : Unit
     {
         memor_speed = speed_my;
         direction = transform.right;
-
-
     }
     void FixedUpdate()
     {
         // if (Activ)
         {
-            isGrounded = false;
+            
 
-         
-      
-          
+            isGrounded = false;
+            CheckGrounded();
+
+           
 
             #region Audio
-            //if (move_x !=0)
-            //{
-            //    if (isGrounded)
-            //        MoweAudio();
-            //}
-            //else if (!IsStep)
-            //{
-            //    StopAudio();
-            //}
+            
+            if (agent.velocity.x != 0 || agent.velocity.y != 0)
+            {
 
-            //if (isGrounded && !isGroundedStart)
+
+                if (isGrounded)
+                {
+                    MoweAudio();
+                }
+            }
+            else if (!IsStep)
+            {
+                StopAudio();
+            }
+
+            //  if (isGrounded && !isGroundedStart)
             //{
             //    DownAudio();
             //}
             #endregion Audio
+
+
+
 
             isGroundedStart = isGrounded;
         }
@@ -165,14 +171,14 @@ public class MoweHerow : Unit
     void CheckGrounded()
     {
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y - 1.5f), 0.3f);
-        foreach (Collider2D c in colliders)
+        Collider[] colliders = Physics.OverlapSphere(new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), 1f);
+        foreach (Collider c in colliders)
         {
-            if (c.tag == "Ground")
+            if (c.tag == "Ground_kithen")
             {                                         
                
                 isGrounded = true;
-                g_Animator.SetBool("Ground", true);
+                //g_Animator.SetBool("Ground", true);
 
                
 
@@ -180,7 +186,7 @@ public class MoweHerow : Unit
             }
             else
             {
-                g_Animator.SetBool("Ground", false);
+               // g_Animator.SetBool("Ground", false);
                 isGrounded = false;
             }
 
@@ -191,7 +197,7 @@ public class MoweHerow : Unit
 
     public void Move( bool  is_Move, bool is_actions, bool isDoubleR, bool isDoubleL, bool isJumping, bool isRun, bool isUsed, Touch [] t, RaycastHit hit)
     {
-       
+    
 
 
         if (isDoubleR || isDoubleL)
@@ -335,39 +341,39 @@ public class MoweHerow : Unit
     #endregion Timer
     ////////////////////////////////////////////////////////////
     #region Audio
-    //void MoweAudio()
-    //{
+    void MoweAudio()
+    {
+
+      
+        if (IsStep)
+        {
+            audioSource.clip = FootSteps[0];
+            audioSource.Play();
+           // audioSource.PlayOneShot(FootSteps[0]);//[Random.Range(0, FootSteps.Length)]);
+
+            IsStep = false;
+        }
 
 
-    //    if (IsStep)
-    //    {
-
-    //        audioSource.PlayOneShot(FootSteps[Random.Range(0, FootSteps.Length)]);
-
-    //        IsStep = false;
-    //    }
-
-
-    //    if (StopStep < 0)
-    //    {
-    //        StopStep = StartStopStep;
-    //        IsStep = true;
-    //    }
-    //    if (StopStep > 0)
-    //        StopStep -= Time.deltaTime;
+        if (StopStep < 0)
+        {
+            StopStep = StartStopStep;
+            IsStep = true;
+        }
+        if (StopStep > 0)
+        {
+            StopStep -= Time.deltaTime;
+        }
 
 
-    //}
-    //void DownAudio()
-    //{        
-    //        fallAudio.PlayOneShot(fallClip); 
-    //}
-    //void StopAudio()
-    //{
-    //    audioSource.Stop();
+    }
+  
+    void StopAudio()
+    {
+        audioSource.Stop();
 
-    //    StopStep = StartStopStep;
-    //    IsStep = true;
-    //}
+        StopStep = StartStopStep;
+        IsStep = true;
+    }
     #endregion Audio
 }
