@@ -61,138 +61,141 @@ public class InputHerow : Unit
 
     void Update()
     {
-        touch = Input.touches;
+
+        if (Activ)
+        {
+            touch = Input.touches;
 
 
-                if (!is_Look)
+            if (!is_Look)
+            {
+                is_Look = CnInputManager.GetButtonDown("Look");
+
+
+            }
+            if (!is_Use)
+            {
+                is_Use = CnInputManager.GetButtonDown("Use");
+
+
+
+            }
+            if (!is_Speek)
+            {
+                is_Speek = CnInputManager.GetButtonDown("Speek");
+
+
+            }
+
+            if (!isJumping)
+            {
+
+                //  isJumping = CnInputManager.GetButtonUp("Jump");
+            }
+            if (!isRun)
+            {
+
+                //   isRun = CnInputManager.GetButton("Run");
+            }
+            if (!isUsed)
+            {
+                //   isUsed = CnInputManager.GetButton("Used");
+            }
+
+            if (!is_Move && !is_Speek && !is_Use && !is_Look)
+            {
+
+
+
+
+                is_Move = touch.Length > 0 && touch[0].phase == TouchPhase.Began || Input.GetMouseButtonDown(0);
+
+                if (touch.Length > 0)
                 {
-                    is_Look = CnInputManager.GetButtonDown("Look");
-             
-                   
-                }
-                if (!is_Use)
-                {
-                    is_Use = CnInputManager.GetButtonDown("Use");
 
-                   
-
-                }
-                if (!is_Speek)
-                {
-                    is_Speek = CnInputManager.GetButtonDown("Speek");
-            
-
-                }
-
-                if (!isJumping)
-                {
-                  
-                  //  isJumping = CnInputManager.GetButtonUp("Jump");
-                }
-                if (!isRun)
-                {
-                  
-                 //   isRun = CnInputManager.GetButton("Run");
-                }
-                if (!isUsed)
-                {  
-                 //   isUsed = CnInputManager.GetButton("Used");
-                }
-
-                if (!is_Move && !is_Speek && !is_Use&& !is_Look)
-                {
-
-
-
-
-                    is_Move = touch.Length > 0 && touch[0].phase == TouchPhase.Began || Input.GetMouseButtonDown(0);
-
-                    if (touch.Length  > 0)
-                    {
-                        
-                        if (touch[0].phase == TouchPhase.Began)
-                        {
-
-                            Ray ray = Camera.main.ScreenPointToRay(touch[0].position);
-
-                          
-
-                            if (Physics.Raycast(ray, out hit))
-                            {
-                                if (hit.transform.gameObject.tag == "floor" || hit.transform.gameObject.tag == "Ground_kithen")
-                                {
-                                    is_Move = true;
-                                }
-                                else if (hit.transform.gameObject.tag == "fridge"|| hit.transform.gameObject.tag == "curbstone")
-                                {
-
-                                    is_Move = true;
-                                    is_actions = true;
-                                }
-                                else
-                                {
-
-                                    is_Move = false;
-                                     is_actions = false;
-                                }
-                            }
-                        }
-                    }
-                    else if (Input.GetMouseButtonDown(0))
+                    if (touch[0].phase == TouchPhase.Began)
                     {
 
+                        Ray ray = Camera.main.ScreenPointToRay(touch[0].position);
 
 
 
-                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-                     //  UnityEngine.Debug.Log(Input.mousePosition);
- 
-                        bool isHit = Physics.Raycast(ray, out hit);
-                        if (isHit)
+                        if (Physics.Raycast(ray, out hit))
                         {
-
-                            // m.text = hit.transform.gameObject.tag;
-                            if (hit.transform.gameObject.tag == "floor"||
-                                hit.transform.gameObject.tag == "Ground_kithen"||
-                                hit.transform.gameObject.tag == "Left_map")
+                            if (hit.transform.gameObject.tag == "floor" || hit.transform.gameObject.tag == "Ground_kithen")
                             {
                                 is_Move = true;
-                                is_actions = false;
-
                             }
                             else if (hit.transform.gameObject.tag == "fridge" || hit.transform.gameObject.tag == "curbstone")
                             {
+
                                 is_Move = true;
                                 is_actions = true;
-
                             }
                             else
                             {
+
                                 is_Move = false;
-                                 is_actions = false;
+                                is_actions = false;
                             }
                         }
-
-                        //GameObject _lineObject = new GameObject();
-                        //LineRenderer _line = _lineObject.AddComponent<LineRenderer>();
-                        //_line.SetPosition(0, ray.origin);
-                        //if (isHit)
-                        //    _line.SetPosition(1, hit.point);
-                        //else
-                        //    _line.SetPosition(1, ray.direction);
-                        //_line.SetWidth(0.05f, 0.05f);
-                        //Destroy(_lineObject, 0.5f);
                     }
                 }
-             else
-             {
-                c_movement.is_action=false;
-             }
-               
+                else if (Input.GetMouseButtonDown(0))
+                {
 
-            
-               
+
+
+
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                    //  UnityEngine.Debug.Log(Input.mousePosition);
+
+                    bool isHit = Physics.Raycast(ray, out hit);
+                    if (isHit)
+                    {
+
+                        // m.text = hit.transform.gameObject.tag;
+                        if (hit.transform.gameObject.tag == "floor" ||
+                            hit.transform.gameObject.tag == "Ground_kithen" ||
+                            hit.transform.gameObject.tag == "Left_map")
+                        {
+                            is_Move = true;
+                            is_actions = false;
+
+                        }
+                        else if (hit.transform.gameObject.tag == "fridge" || hit.transform.gameObject.tag == "curbstone")
+                        {
+                            is_Move = true;
+                            is_actions = true;
+
+                        }
+                        else
+                        {
+                            is_Move = false;
+                            is_actions = false;
+                        }
+                    }
+
+                    //GameObject _lineObject = new GameObject();
+                    //LineRenderer _line = _lineObject.AddComponent<LineRenderer>();
+                    //_line.SetPosition(0, ray.origin);
+                    //if (isHit)
+                    //    _line.SetPosition(1, hit.point);
+                    //else
+                    //    _line.SetPosition(1, ray.direction);
+                    //_line.SetWidth(0.05f, 0.05f);
+                    //Destroy(_lineObject, 0.5f);
+                }
+            }
+            else
+            {
+                c_movement.is_action = false;
+            }
+
+
+
+        }  
                 
 
                 #region
@@ -238,8 +241,8 @@ public class InputHerow : Unit
     private void FixedUpdate()
     {
 
-        if (Activ)
-        {
+        //if (Activ)
+       // {
             //Get horizontal axis
             //float horizontal=0;// = CnInputManager.GetAxis("Horizontal");         
 
@@ -257,11 +260,11 @@ public class InputHerow : Unit
             is_Speek = false;
             is_Use = false;
           
-        }
-        else
-        {
+      //  }
+      //  else
+      //  {
            // c_movement.Follow();
-        }
+      //  }
     }
 
     public virtual void FollowMod()

@@ -59,8 +59,11 @@ public class MoweHerow : Unit
     public float speedStopWall = 1f;
 
     #endregion Pole
+
+    #region 
     private void Awake()
     {
+        load_Poz();
         myAgent = GetComponent<NavMeshAgent>();      
         g_Animator = GetComponent<Animator>();
         now_unit_herow = new Vector3(transform.position.x, transform.position.y, transform.position.z);
@@ -117,6 +120,8 @@ public class MoweHerow : Unit
         if (Times())
             time = true;
     }
+
+    #endregion
     ////////////////////////////////////////////////////////////
 
     void Size_picture()
@@ -178,10 +183,7 @@ public class MoweHerow : Unit
             {                                         
                
                 isGrounded = true;
-                //g_Animator.SetBool("Ground", true);
-
-               
-
+                //g_Animator.SetBool("Ground", true);              
                 return;
             }
             else
@@ -206,13 +208,8 @@ public class MoweHerow : Unit
         if (is_Move)
         {
             _hit = hit;
-
-
-          
-
+        
             agent.SetDestination(hit.point);
-
-
 
             move_x = myAgent.velocity.x >= 0 ? (myAgent.velocity.x == 0 ? 0 : 1) : (myAgent.velocity.x < 0 ? -1 : 0);
             move_y = myAgent.velocity.z >= 0 ? (myAgent.velocity.z == 0 ? 0 : 1) : (myAgent.velocity.z < 0 ? -1 : 0);
@@ -376,4 +373,32 @@ public class MoweHerow : Unit
         IsStep = true;
     }
     #endregion Audio
+
+    #region DATA
+    public void save_Poz()
+    {
+
+        PlayerPrefs.SetFloat("PozXP", transform.position.x); // т.к. автоматической работы 
+        PlayerPrefs.SetFloat("PozYP", transform.position.y); // с массивами нет, разбиваем на
+        PlayerPrefs.SetFloat("PozZP", transform.position.z);  // отдельные float и записываем
+
+    }
+
+    public void load_Poz()
+    {
+
+       
+        agent.Warp(new Vector3(PlayerPrefs.GetFloat("PozXP"), PlayerPrefs.GetFloat("PozYP"), PlayerPrefs.GetFloat("PozZP")));
+    }
+    #endregion DATA
+
+
+    void OnApplicationQuit()
+    {
+        save_Poz();
+    }
+    void OnDisable()
+    {
+        save_Poz();
+    }
 }
