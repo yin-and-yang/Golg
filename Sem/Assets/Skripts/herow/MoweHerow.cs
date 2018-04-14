@@ -387,8 +387,13 @@ public class MoweHerow : Unit
     public void load_Poz()
     {
 
-       
-        agent.Warp(new Vector3(PlayerPrefs.GetFloat("PozXP"), PlayerPrefs.GetFloat("PozYP"), PlayerPrefs.GetFloat("PozZP")));
+
+        //   agent.Warp(new Vector3(PlayerPrefs.GetFloat("PozXP"), PlayerPrefs.GetFloat("PozYP"), PlayerPrefs.GetFloat("PozZP")));
+        //transform.position = new Vector3(PlayerPrefs.GetFloat("PozXP") == 0 ? 2 : PlayerPrefs.GetFloat("PozXP"),
+        //    PlayerPrefs.GetFloat("PozYP") == 0 ? -2 : PlayerPrefs.GetFloat("PozYP"), 
+        //    PlayerPrefs.GetFloat("PozZP") == 0 ? -3 : PlayerPrefs.GetFloat("PozZP"));
+        transform.position = new Vector3(5, -2, -3);
+
     }
     #endregion DATA
 
